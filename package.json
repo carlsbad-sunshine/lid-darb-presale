@@ -1,5 +1,5 @@
 {
-  "name": "lid-myx-presale",
+  "name": "lid-darb-presale",
   "version": "1.0.0",
   "dependencies": {
     "@arkane-network/web3-arkane-provider": "^0.2.5",
@@ -51,7 +51,7 @@
     "extends": "react-app"
   },
   "scripts": {
-    "build": "react-scripts build",
+    "build": "react-scripts --max_old_space_size=4096 build",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test"
