@@ -1,39 +1,63 @@
-import React, {useState, useEffect} from 'react';
-import {Box, Text, Button, NumberInput, NumberInputField  } from "@chakra-ui/core"
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Text,
+  Button,
+  NumberInput,
+  NumberInputField
+} from '@chakra-ui/core';
 
-  function shortenDecimal(decimalString) {
-    decimalString = decimalString.toString()
-    if(!decimalString.includes('.')) return decimalString
-    return decimalString.substring(0,decimalString.indexOf('.'))
-  }
+function shortenDecimal(decimalString) {
+  decimalString = decimalString.toString();
+  if (!decimalString.includes('.')) return decimalString;
+  return decimalString.substring(0, decimalString.indexOf('.'));
+}
 
-export default function DepositForm({web3,rate,cap,accountDeposit,setVal,val,handleClick,isWhitelisted}) {
+export default function DepositForm({
+  web3,
+  rate,
+  cap,
+  accountDeposit,
+  setVal,
+  val,
+  handleClick,
+  isWhitelisted
+}) {
+  const toBN = web3.utils.toBN;
+  const toWei = web3.utils.toWei;
+  const fromWei = web3.utils.fromWei;
 
-  const toBN = web3.utils.toBN
-  const toWei = web3.utils.toWei
-  const fromWei = web3.utils.fromWei
+  const [displayVal, setDisplayVal] = useState('');
+  const [availableMax, setAvailableMax] = useState(toWei('1'));
 
+  useEffect(() => {
+    if (displayVal != '' && !isNaN(displayVal)) setVal(toWei(displayVal));
+  }, [displayVal]);
 
-  const [displayVal, setDisplayVal] = useState("")
-  const [availableMax, setAvailableMax] = useState(toWei("1"))
+  useEffect(() => {
+    if (cap != '' && !isNaN(cap) && toBN(cap).gte(toBN(accountDeposit)))
+      setAvailableMax(toBN(cap).sub(toBN(accountDeposit)));
+  }, [cap, accountDeposit]);
 
-  useEffect(()=>{
-    if(displayVal != "" && !isNaN(displayVal))
-      setVal(toWei(displayVal))
-  },[displayVal])
-
-  useEffect(()=>{
-    if(cap != "" && !isNaN(cap) && toBN(cap).gte(toBN(accountDeposit)))
-      setAvailableMax(
-        toBN(cap).sub(toBN(accountDeposit))
-      )
-  },[cap,accountDeposit])
-
-
-  return(
-    <Box w="100%" maxWidth="1200px" ml="auto" mr="auto" mt="60px" mb="60px" pl={{base:"20px", lg:"0px"}} pr={{base:"20px", lg:"0px"}}>
-      <Box w="100%" p="20px"textAlign="left" color="lid.fg" position="relative" border="solid 1px" borderColor="lid.stroke">
-        <Text fontSize={{base:"24px",sm:"36px"}} fontWeight="bold">
+  return (
+    <Box
+      w="100%"
+      maxWidth="1200px"
+      ml="auto"
+      mr="auto"
+      mt="60px"
+      mb="60px"
+      pl={{ base: '20px', lg: '0px' }}
+      pr={{ base: '20px', lg: '0px' }}>
+      <Box
+        w="100%"
+        p="20px"
+        textAlign="left"
+        color="lid.fg"
+        position="relative"
+        border="solid 1px"
+        borderColor="lid.stroke">
+        <Text fontSize={{ base: '24px', sm: '36px' }} fontWeight="bold">
           Deposit ETH for DARB
         </Text>
         <Text fontSize="18px" color="blue.500">
@@ -43,45 +67,97 @@ export default function DepositForm({web3,rate,cap,accountDeposit,setVal,val,han
           Your Available Max: {shortenDecimal(fromWei(availableMax))} ETH
         </Text>
         <Text fontSize="18px">
-          Estimated DARB: {!val ? "0" : shortenDecimal(
-            fromWei(toBN(fromWei(val)).mul(toBN(rate)).mul(toBN("10000")).div(toBN("10250")))
-          )}
+          Estimated DARB:{' '}
+          {!val
+            ? '0'
+            : shortenDecimal(
+                fromWei(
+                  toBN(fromWei(val))
+                    .mul(toBN(rate))
+                    .mul(toBN('10000'))
+                    .div(toBN('10250'))
+                )
+              )}
         </Text>
 
-        <NumberInput fontSize="18px" w="100%" maxW="600px" mb="0px"
-          display="inline-block" value={displayVal} min={0.01}
-          max={fromWei(availableMax)} mt="10px" step="any" precision="any"
-          >
-          <NumberInputField w="100%" h="50px" border="solid 2px" borderColor="lid.stroke" borderRadius="30px" pl="20px"
-            fontSize="18px" position="relative" zIndex="1" step="any" precision="any" pattern="[0-9\.]*"
-            type="number" bg="lid.bg" color="lid.fg" placeholder="Amount of ETH to deposit."
-            whilePlaceholder={{color:"lid.fgMed" }}
-            onChange={e => {
-              if(isNaN(e.target.value)) return
-              if(e.target.value === "") {
-                setDisplayVal("")
-              } else if(Number(e.target.value) > 140000000) {
-                setDisplayVal("140000000")
-              } else if(Number(e.target.value) < 0) {
-                setDisplayVal("0")
-              } else{
-                setDisplayVal(e.target.value)
+        <NumberInput
+          fontSize="18px"
+          w="100%"
+          maxW="600px"
+          mb="0px"
+          display="inline-block"
+          value={displayVal}
+          min={0.01}
+          max={fromWei(availableMax)}
+          mt="10px"
+          step="any"
+          precision="any">
+          <NumberInputField
+            w="100%"
+            h="50px"
+            border="solid 2px"
+            borderColor="lid.stroke"
+            borderRadius="30px"
+            pl="20px"
+            fontSize="18px"
+            position="relative"
+            zIndex="1"
+            step="any"
+            precision="any"
+            pattern="[0-9\.]*"
+            type="number"
+            bg="lid.bg"
+            color="lid.fg"
+            placeholder="Amount of ETH to deposit."
+            whilePlaceholder={{ color: 'lid.fgMed' }}
+            onChange={(e) => {
+              if (isNaN(e.target.value)) return;
+              if (e.target.value === '') {
+                setDisplayVal('');
+              } else if (Number(e.target.value) > 140000000) {
+                setDisplayVal('140000000');
+              } else if (Number(e.target.value) < 0) {
+                setDisplayVal('0');
+              } else {
+                setDisplayVal(e.target.value);
               }
-            }} />
-          <Button fontSize="18px" display="inline-block"
-            border="solid 2px" borderRadius="25px" bg="lid.buttonBg" color="lid.fgLight" w="120px" h="50px"
-            position="absolute" right="0px" zIndex="2" m="0px" borderColor="lid.buttonBg"
-            onClick={()=>setDisplayVal(fromWei(availableMax))}>
+            }}
+          />
+          <Button
+            fontSize="18px"
+            display="inline-block"
+            border="solid 2px"
+            borderRadius="25px"
+            bg="lid.buttonBg"
+            color="lid.fgLight"
+            w="120px"
+            h="50px"
+            position="absolute"
+            right="0px"
+            zIndex="2"
+            m="0px"
+            borderColor="lid.buttonBg"
+            onClick={() => setDisplayVal(fromWei(availableMax))}>
             Max
           </Button>
         </NumberInput>
-        <Button variantColor="blue" bg="lid.brand" color="white"  border="none"  display="block"
-          borderRadius="25px" w="200px" h="50px" m="0px" mt="30px"
-          fontWeight="regular" fontSize="18px"
-          onClick={handleClick} >
+        <Button
+          variantColor="blue"
+          bg="lid.brand"
+          color="white"
+          border="none"
+          display="block"
+          borderRadius="25px"
+          w="200px"
+          h="50px"
+          m="0px"
+          mt="30px"
+          fontWeight="regular"
+          fontSize="18px"
+          onClick={handleClick}>
           Deposit
         </Button>
       </Box>
     </Box>
-  )
+  );
 }
