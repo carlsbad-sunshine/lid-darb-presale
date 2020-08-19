@@ -7,7 +7,7 @@ export default function ReferralCode({web3, address, earnedReferrals, referralCo
   return (<Box w="100%" maxWidth="1200px" ml="auto" mr="auto" mt="60px" mb="60px" pl={{base:"20px", lg:"0px"}} pr={{base:"20px", lg:"0px"}}>
     <Box textAlign="left" border="solid 1px" borderRadius="5px" borderColor="lid.stroke"bg="white" display="block" w="100%" mb="20px"
        p="20px">
-      <CopyToClipboard text={"https://sale.dexarb.com/#/"+address}>
+      <CopyToClipboard text={"https://darb.lid.sh/#/"+address}>
         <Button display="block" color="lid.fgLight" bg="lid.buttonBg" borderRadius="25px"
           h="50px" w="140px" float="right" mt="25px">
           Copy
@@ -22,7 +22,7 @@ export default function ReferralCode({web3, address, earnedReferrals, referralCo
       <Text wordBreak="break-word" p="15px" pl="25px" color="lid.fgMed" border="solid 1px" borderColor="lid.stroke" borderRadius="28px"
         w="100%"
       >
-        https://sale.dexarb.com/#/{address}
+        https://darb.lid.sh/#/{address}
       </Text>
     </Box>
     <Grid w="100%" gap="20px" mb="40px"
