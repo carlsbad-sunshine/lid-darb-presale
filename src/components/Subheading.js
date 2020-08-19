@@ -1,21 +1,15 @@
 import React from 'react';
-import { Text, Box, Flex, Link, Grid, Image } from '@chakra-ui/core';
-import addresses from '../contracts/addresses';
-import { shortEther } from '../utils';
+import { Text, Box, Flex, Grid, Image } from '@chakra-ui/core';
+import { shortEther, toBN, toWei } from '../utils';
+import { totalPresale } from '../config';
 
 export default function Subheading({
-  web3,
-  address,
-  totalLid,
   totalEth,
   totalDepositors,
   accountEthDeposit,
-  accountLid,
+  accountShares,
   maxShares
 }) {
-  const toBN = web3.utils.toBN;
-  const toWei = web3.utils.toWei;
-  const fromWei = web3.utils.fromWei;
   return (
     <Box
       w="100%"
@@ -86,7 +80,7 @@ export default function Subheading({
               Your ETH Deposits
             </Text>
             <Text fontSize="38px" w="100%" fontWeight="bold">
-              {shortEther(accountEthDeposit, web3)}
+              {shortEther(accountEthDeposit)}
             </Text>
           </Box>
           <Box
@@ -110,12 +104,11 @@ export default function Subheading({
               Your DARB Tokens
             </Text>
             <Text fontSize="38px" w="100%" fontWeight="bold">
-              {maxShares.toString() !== '0'
+              {maxShares !== '0'
                 ? shortEther(
-                    toBN(accountLid)
-                      .mul(toBN(toWei('400000000')))
-                      .div(toBN(maxShares)),
-                    web3
+                    toBN(accountShares)
+                      .mul(toBN(toWei(totalPresale)))
+                      .div(toBN(maxShares))
                   )
                 : '0'}
             </Text>
@@ -165,7 +158,7 @@ export default function Subheading({
               Total ETH Deposited
             </Text>
             <Text fontSize="38px" w="100%" fontWeight="bold" color="lid.brand">
-              {shortEther(totalEth, web3)}
+              {shortEther(totalEth)}
             </Text>
           </Box>
           <Box
@@ -189,7 +182,7 @@ export default function Subheading({
               Total Presale DARB
             </Text>
             <Text fontSize="38px" w="100%" fontWeight="bold" color="lid.brand">
-              {shortEther(toWei('400000000'), web3)}
+              {shortEther(toWei(totalPresale))}
             </Text>
           </Box>
         </Grid>

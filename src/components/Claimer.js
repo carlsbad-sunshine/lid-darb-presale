@@ -1,25 +1,17 @@
 import React from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Text, Box, Button, Grid } from '@chakra-ui/core';
-import { shortEther } from '../utils';
 import CountDownShort from './CountDownShort';
+import { shortEther, toBN, toWei } from '../utils';
+import { totalPresale } from '../config';
 
 export default function Claimer({
-  web3,
-  hasSentToUniswap,
-  hasIssuedTokens,
-  hasSentEther,
   finalEndTime,
-  accountLid,
+  accountShares,
   accountRedeemable,
   maxShares,
   accountClaimedLid,
   handleLidClaim
 }) {
-  const toBN = web3.utils.toBN;
-  const toWei = web3.utils.toWei;
-  const fromWei = web3.utils.fromWei;
-
   return (
     <Box
       w="100%"
@@ -47,7 +39,7 @@ export default function Claimer({
           2% released / hour
         </Text>
         <Text fontSize="18px" color="lid.fg">
-          DARB to Claim: {shortEther(accountRedeemable, web3)}
+          DARB to Claim: {shortEther(accountRedeemable)}
         </Text>
         <Button
           variantColor="blue"
@@ -85,7 +77,7 @@ export default function Claimer({
             Total DARB Claimed
           </Text>
           <Text fontSize="38px" w="100%" fontWeight="bold">
-            {shortEther(accountClaimedLid, web3)}
+            {shortEther(accountClaimedLid)}
           </Text>
         </Box>
         <Box
@@ -99,15 +91,13 @@ export default function Claimer({
             DARB / Hour
           </Text>
           <Text fontSize="38px" w="100%" fontWeight="bold">
-            //TODO: Fix calculation
-            {maxShares.toString() !== '0'
+            {maxShares !== '0'
               ? shortEther(
-                  toBN(accountLid)
-                    .mul(toBN(toWei('400000000')))
+                  toBN(accountShares)
+                    .mul(toBN(toWei(totalPresale)))
                     .div(toBN(maxShares))
                     .mul(toBN('2'))
-                    .div(toBN('100')),
-                  web3
+                    .div(toBN('100'))
                 )
               : '0'}
           </Text>

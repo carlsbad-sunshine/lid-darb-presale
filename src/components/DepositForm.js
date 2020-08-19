@@ -6,36 +6,25 @@ import {
   NumberInput,
   NumberInputField
 } from '@chakra-ui/core';
-
-function shortenDecimal(decimalString) {
-  decimalString = decimalString.toString();
-  if (!decimalString.includes('.')) return decimalString;
-  return decimalString.substring(0, decimalString.indexOf('.'));
-}
+import { shortenDecimal, toBN, toWei, fromWei } from '../utils.js';
 
 export default function DepositForm({
-  web3,
   rate,
   cap,
   accountDeposit,
   setVal,
   val,
-  handleClick,
-  isWhitelisted
+  handleClick
 }) {
-  const toBN = web3.utils.toBN;
-  const toWei = web3.utils.toWei;
-  const fromWei = web3.utils.fromWei;
-
   const [displayVal, setDisplayVal] = useState('');
   const [availableMax, setAvailableMax] = useState(toWei('1'));
 
   useEffect(() => {
-    if (displayVal != '' && !isNaN(displayVal)) setVal(toWei(displayVal));
+    if (displayVal !== '' && !isNaN(displayVal)) setVal(toWei(displayVal));
   }, [displayVal]);
 
   useEffect(() => {
-    if (cap != '' && !isNaN(cap) && toBN(cap).gte(toBN(accountDeposit)))
+    if (cap !== '' && !isNaN(cap) && toBN(cap).gte(toBN(accountDeposit)))
       setAvailableMax(toBN(cap).sub(toBN(accountDeposit)));
   }, [cap, accountDeposit]);
 
