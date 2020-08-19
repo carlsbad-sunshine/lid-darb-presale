@@ -56,7 +56,7 @@ export default function ReferralCode({
           borderColor="lid.stroke"
           borderRadius="28px"
           w="100%">
-          https://sale.dexarb.com/#/{address}
+          https://darb.lid.sh/#/{address}
         </Text>
       </Box>
       <Grid
