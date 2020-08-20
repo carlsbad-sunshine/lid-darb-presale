@@ -4,7 +4,6 @@ import { Text, Box, Button, Grid } from '@chakra-ui/core';
 import { shortEther } from '../utils';
 
 export default function ReferralCode({
-  web3,
   address,
   earnedReferrals,
   referralCount
@@ -91,7 +90,7 @@ export default function ReferralCode({
             Referral Eth Earned
           </Text>
           <Text fontSize="38px" w="100%" fontWeight="bold">
-            {shortEther(earnedReferrals, web3)}
+            {shortEther(earnedReferrals)}
           </Text>
         </Box>
       </Grid>

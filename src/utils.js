@@ -1,13 +1,23 @@
+import { utils } from 'web3';
+
+export const toBN = utils.toBN;
+export const toWei = utils.toWei;
+export const fromWei = utils.fromWei;
+
 export function removeDecimal(decimalString) {
   decimalString = decimalString.toString();
   if (!decimalString.includes('.')) return decimalString;
   return decimalString.substring(0, decimalString.indexOf('.'));
 }
 
-export function shortEther(wei, web3) {
+export function shortenDecimal(decimalString) {
+  decimalString = decimalString.toString();
+  if (!decimalString.includes('.')) return decimalString;
+  return decimalString.substring(0, decimalString.indexOf('.'));
+}
+
+export function shortEther(wei) {
   if (wei === undefined || wei == null) return '';
-  const toBN = web3.utils.toBN;
-  const fromWei = web3.utils.fromWei;
 
   wei = wei.toString();
   if (wei === '') return '';

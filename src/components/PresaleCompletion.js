@@ -1,14 +1,10 @@
 import React from 'react';
 import { Text, Box, Button } from '@chakra-ui/core';
-import addresses from '../contracts/addresses';
-import { shortEther } from '../utils';
 
 export default function PresaleCompletion({
-  isActive,
   isEnded,
   handleSendToUniswap,
-  handleIssueTokens,
-  handleAllocateEth
+  handleIssueTokens
 }) {
   return (
     <Box

@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, Box, Flex, Image, Link, Button } from '@chakra-ui/core';
 import Blockie from './Blockie';
 
-export default function Header({ web3, address, isWhitelisted, onConnect }) {
+export default function Header({ address, onConnect }) {
   return (
     <Box w="100%" bg="lid.bgMed" m="0" pt="0px">
       <Flex
@@ -37,7 +37,7 @@ export default function Header({ web3, address, isWhitelisted, onConnect }) {
             DARB Presale
           </Text>
         </Link>
-        {web3 && address ? (
+        {address ? (
           <Box ml="auto" display="inline-block">
             <Blockie address={address} size={40} />
             <Text
