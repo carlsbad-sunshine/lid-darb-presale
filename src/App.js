@@ -59,8 +59,9 @@ function App() {
     referralCount: '0',
     finalEndTime: '0',
     accountRedeemable: '0',
-    accountClaimedMYX: '0',
+    accountClaimedTokens: '0',
     maxShares: '0',
+    hardcap: '0',
     isEnded: false
   });
 
@@ -77,8 +78,9 @@ function App() {
     referralCount,
     finalEndTime,
     accountRedeemable,
-    accountClaimedDarb,
+    accountClaimedTokens,
     maxShares,
+    hardcap,
     isEnded
   } = state;
 
@@ -94,11 +96,13 @@ function App() {
     const multiCallConfig = {
       web3,
       multicallAddress: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
-      interval: 5000
+      interval: 10000
     };
 
     const presale = new web3.eth.Contract(abis.presale, addresses.presale);
     setLidPresale(presale);
+
+    defaultWatcher.stop();
 
     defaultWatcher.recreate(
       [
@@ -122,11 +126,6 @@ function App() {
           returns: [['isEnded']]
         },
         {
-          target: addresses.redeemer,
-          call: ['getMaxShares(uint256)(uint256)', toWei('1000')],
-          returns: [['maxShares', (val) => val.toString()]]
-        },
-        {
           target: addresses.presale,
           call: ['getMaxWhitelistedDeposit()(uint256)'],
           returns: [['maxDeposit', (val) => val.toString()]]
@@ -135,6 +134,11 @@ function App() {
           target: addresses.timer,
           call: ['endTime()(uint256)'],
           returns: [['endTime', (val) => new Date(val * 1000)]]
+        },
+        {
+          target: addresses.presale,
+          call: ['hardcap()(uint256)'],
+          returns: [['hardcap', (val) => val.toString()]]
         }
       ],
       multiCallConfig
@@ -151,15 +155,17 @@ function App() {
   }, [web3]);
 
   useEffect(() => {
-    if (!web3 || !address) {
+    if (!web3 || !address || hardcap === '0') {
       return;
     }
 
     const multiCallConfig = {
       web3,
       multicallAddress: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
-      interval: 5000
+      interval: 10000
     };
+
+    walletWatcher.stop();
 
     walletWatcher.recreate(
       [
@@ -186,7 +192,12 @@ function App() {
         {
           target: addresses.redeemer,
           call: ['accountClaimedTokens(address)(uint256)', address],
-          returns: [['accountClaimedMYX', (val) => val.toString()]]
+          returns: [['accountClaimedTokens', (val) => val.toString()]]
+        },
+        {
+          target: addresses.redeemer,
+          call: ['getMaxShares(uint256)(uint256)', hardcap],
+          returns: [['maxShares', (val) => val.toString()]]
         },
         {
           target: addresses.redeemer,
@@ -194,7 +205,7 @@ function App() {
             'calculateRatePerEth(uint256,uint256,uint256)(uint256)',
             toWei(totalPresale),
             totalEth,
-            toWei('1000')
+            hardcap
           ],
           returns: [['currentPrice', (val) => val.toString()]]
         },
@@ -221,7 +232,7 @@ function App() {
     });
 
     walletWatcher.start();
-  }, [web3, address, finalEndTime, totalEth]);
+  }, [web3, address, finalEndTime, totalEth, hardcap]);
 
   const handleDeposit = async function () {
     if (!depositVal) {
@@ -335,7 +346,7 @@ function App() {
           maxShares={maxShares}
           finalEndTime={finalEndTime}
           accountRedeemable={accountRedeemable}
-          accountClaimedDarb={accountClaimedDarb}
+          accountClaimedTokens={accountClaimedTokens}
         />
       )}
       {isActive && !isEnded && (
