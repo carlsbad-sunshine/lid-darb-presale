@@ -400,6 +400,11 @@
           "internalType": "uint256",
           "name": "totalPresaleTokens",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "hardCap",
+          "type": "uint256"
         }
       ],
       "name": "calculateReedemable",
