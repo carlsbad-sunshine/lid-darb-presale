@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import { createWatcher } from '@makerdao/multicall';
-import { ThemeProvider, CSSReset, Box } from '@chakra-ui/core';
+import { ThemeProvider, CSSReset, Box, Text } from '@chakra-ui/core';
 
 import Header from './components/Header';
 import Subheading from './components/Subheading';
@@ -61,7 +61,8 @@ function App() {
     accountRedeemable: '0',
     accountClaimedMYX: '0',
     maxShares: '0',
-    isEnded: false
+    isEnded: false,
+    isPaused: true
   });
 
   const {
@@ -79,7 +80,8 @@ function App() {
     accountRedeemable,
     accountClaimedDarb,
     maxShares,
-    isEnded
+    isEnded,
+    isPaused
   } = state;
 
   let referralAddress = window.location.hash.substr(2);
@@ -328,7 +330,15 @@ function App() {
         accountShares={accountShares}
         maxShares={maxShares}
       />
-      {isActive && isEnded && (
+      {isPaused && (<>
+        <Text fontSize="36px" textAlign="center" color="lid.brandDark" mt="60px">
+          Presale Paused.
+        </Text>
+        <Text textAlign="center" mb="200px">
+        Please be patient. Upgrades underway.
+        </Text>
+      </>)}
+      {isActive && isEnded && !isPaused && (
         <Claimer
           accountShares={accountShares}
           handleLidClaim={handleLidClaim}
@@ -338,7 +348,7 @@ function App() {
           accountClaimedDarb={accountClaimedDarb}
         />
       )}
-      {isActive && !isEnded && (
+      {isActive && !isEnded && !isPaused && (
         <>
           <EndTimer expiryTimestamp={endTime} />
           <DepositForm
@@ -351,7 +361,7 @@ function App() {
           />
         </>
       )}
-      {!isActive && !isEnded && <StartTimer expiryTimestamp={startTime} />}
+      {!isActive && !isEnded && !isPaused && <StartTimer expiryTimestamp={startTime} />}
       <ReferralCode
         address={address}
         earnedReferrals={earnedReferrals}
@@ -367,7 +377,7 @@ function App() {
         ml="auto"
         mr="auto"
       />
-      {isActive && isEnded && (
+      {isActive && isEnded && !isPaused (
         <PresaleCompletion
           isEnded={isEnded}
           handleSendToUniswap={handleSendToUniswap}

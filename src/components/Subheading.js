@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, Box, Flex, Grid, Image, Link } from '@chakra-ui/core';
 import { shortEther, toBN, toWei } from '../utils';
 import { totalPresale } from '../config';
-import addresses from './contracts/addresses';
+import addresses from '../contracts/addresses';
 
 export default function Subheading({
   totalEth,
