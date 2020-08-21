@@ -52,7 +52,7 @@ export const providerOptions = {
 export const totalPresale = '400000000';
 
 export const infura_ids = [
-  'ae2a1095738a45158a9401678dcf74c3',
-  'dfbec2f8c3b940e09e18c7692210370e',
-  'f2ed9fbfc3104c44995dd5eef0be78f6'
+  '9d7be60b1fe34aa1933b7585f10772c4',
+  '43e49609d519490d9cce0015ff6424b3',
+  '2030424d188140d9a45418f0951dbcd7'
 ];

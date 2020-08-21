@@ -61,7 +61,7 @@ export default function Subheading({
             <Link
               wordBreak="break-word"
               color="lid.brand"
-              href={"https://etherscan.io/address/"+addresses.presale}
+              href={'https://etherscan.io/address/' + addresses.presale}
               mt="15px"
               display="block">
               {addresses.presale}

@@ -9,7 +9,7 @@ export default function Claimer({
   accountShares,
   accountRedeemable,
   maxShares,
-  accountClaimedLid,
+  accountClaimedTokens,
   handleLidClaim
 }) {
   return (
@@ -77,7 +77,7 @@ export default function Claimer({
             Total DARB Claimed
           </Text>
           <Text fontSize="38px" w="100%" fontWeight="bold">
-            {shortEther(accountClaimedLid)}
+            {shortEther(accountClaimedTokens)}
           </Text>
         </Box>
         <Box
